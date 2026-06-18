@@ -1,4 +1,4 @@
-package org.example.lab1.modules;
+package org.example.lab1;
 
 import java.util.Objects;
 

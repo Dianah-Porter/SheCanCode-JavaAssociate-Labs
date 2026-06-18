@@ -1,7 +1,7 @@
 
-package org.example.lab1.store;
+package org.example.lab1;
 
-import org.example.lab1.modules.Product;
+import org.example.lab1.Product;
 
 import java.util.ArrayList;
 import java.util.Iterator;

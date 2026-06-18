@@ -1,4 +1,4 @@
-package org.example.lab2.exception;
+package org.example.lab2;
 
 public class TransactionException extends Exception {
 

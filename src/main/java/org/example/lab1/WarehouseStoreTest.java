@@ -1,7 +1,7 @@
-package org.example.lab1.test;
+package org.example.lab1;
 
-import org.example.lab1.modules.Product;
-import org.example.lab1.store.WarehouseStore;
+import org.example.lab1.Product;
+import org.example.lab1.WarehouseStore;
 
 import java.util.List;
 

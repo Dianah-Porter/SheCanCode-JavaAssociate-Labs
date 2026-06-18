@@ -1,6 +1,4 @@
-package org.example.lab1.benchmark;
-
-import org.example.lab1.modules.Product;
+package org.example.lab1;
 
 import java.util.*;
 
