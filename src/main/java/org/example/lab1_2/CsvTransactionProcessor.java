@@ -1,4 +1,4 @@
-package org.example.lab2;
+package org.example.lab1_2;
 
 import java.io.*;
 import java.util.ArrayList;

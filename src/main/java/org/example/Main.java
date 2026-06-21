@@ -1,7 +1,7 @@
 package org.example;
 
-import org.example.lab1.Product;
-import org.example.lab1.WarehouseStore;
+import org.example.lab1_1.Product;
+import org.example.lab1_1.WarehouseStore;
 
 public class Main {
     public static void main(String[] args) {

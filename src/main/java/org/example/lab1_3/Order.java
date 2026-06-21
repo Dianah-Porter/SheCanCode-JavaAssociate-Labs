@@ -1,4 +1,4 @@
-package org.example.lab3;
+package org.example.lab1_3;
 
 public class Order {
     public enum Type { BUY, SELL }

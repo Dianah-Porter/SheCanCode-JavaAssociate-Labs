@@ -1,4 +1,4 @@
-package org.example.lab2;
+package org.example.lab1_2;
 
 public class ParseError {
     private final int lineNumber;
