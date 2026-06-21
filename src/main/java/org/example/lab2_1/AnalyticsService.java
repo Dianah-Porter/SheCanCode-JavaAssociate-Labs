@@ -1,149 +1,148 @@
 package org.example.lab2_1;
-import org.example.lab2_1.Order;
-import org.example.lab2_1.LineItem;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class AnalyticsService {
 
-    // Exercise 2.1: Stream Pipeline for Product Analytics
-    public List<LineItem> getAllLineItems(List<Order> orders) {
-        // flatMap: Flattens List<List<LineItem>> into List<LineItem>
+    // Exercise 2.1
+
+    public List<LineItem> flattenLineItems(List<Order> orders) {
         return orders.stream()
-                .flatMap(order -> order.getItems().stream())
-                .collect(Collectors.toList());
+                .flatMap(order -> order.getLineItems().stream())
+                .toList();
     }
 
-    /**
-     * Calculate total revenue from orders with quantity > 5
-     */
-    public double getRevenueFromLargeOrders(List<Order> orders) {
+    public double calculateHighQuantityRevenue(List<Order> orders) {
         return orders.stream()
-                .flatMap(order -> order.getItems().stream())
+                .flatMap(order -> order.getLineItems().stream())
                 .filter(item -> item.getQuantity() > 5)
-                .mapToDouble(LineItem::getRevenue)
-                .sum();
+                .map(item -> item.getProduct().getPrice() * item.getQuantity())
+                .reduce(0.0, Double::sum);
     }
 
-    /**
-     * Find the top N products by total revenue
-     */
-    public List<Map.Entry<String, Double>> topNProductsByRevenue(List<Order> orders, int n) {
-        return orders.stream()
-                .flatMap(order -> order.getItems().stream())
+    public List<ProductRevenue> topNProductsByRevenue(List<Order> orders, int n) {
+
+        Map<Product, Double> revenueByProduct = orders.stream()
+                .flatMap(order -> order.getLineItems().stream())
                 .collect(Collectors.groupingBy(
-                        LineItem::getProductId,
-                        Collectors.summingDouble(LineItem::getRevenue)
-                ))
-                .entrySet()
+                        LineItem::getProduct,
+                        Collectors.summingDouble(item ->
+                                item.getProduct().getPrice() * item.getQuantity())
+                ));
+
+        return revenueByProduct.entrySet()
                 .stream()
-                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .map(entry -> new ProductRevenue(
+                        entry.getKey().getProductId(),
+                        entry.getKey().getProductName(),
+                        entry.getValue()
+                ))
+                .sorted(Comparator.comparing(ProductRevenue::getRevenue).reversed())
                 .limit(n)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    // Exercise 2.2: Collectors & Grouping
+    // Exercise 2.2
 
-    /**
-     * Group line items by category and count items per category
-     */
-    public Map<String, Long> getItemCountByCategory(List<Order> orders) {
+    public Map<String, Long> countItemsByCategory(List<Order> orders) {
+
         return orders.stream()
-                .flatMap(order -> order.getItems().stream())
+                .flatMap(order -> order.getLineItems().stream())
                 .collect(Collectors.groupingBy(
-                        LineItem::getCategory,
+                        item -> item.getProduct().getCategory(),
                         Collectors.counting()
                 ));
     }
 
-    /**
-     * Split orders into delivered and pending
-     */
-    public Map<Boolean, List<Order>> partitionOrdersByDelivery(List<Order> orders) {
+    public Map<Boolean, List<Order>> partitionOrders(List<Order> orders) {
+
         return orders.stream()
                 .collect(Collectors.partitioningBy(Order::isDelivered));
     }
 
-    /**
-     * Build a map of productId to average price across all line items
-     */
-    public Map<String, Double> getProductAveragePrice(List<Order> orders) {
-        // First, collect all product prices per productId
-        Map<String, List<Double>> productPrices = orders.stream()
-                .flatMap(order -> order.getItems().stream())
-                .collect(Collectors.groupingBy(
-                        LineItem::getProductId,
-                        Collectors.mapping(
-                                item -> item.getProduct().getPrice(),
-                                Collectors.toList()
-                        )
-                ));
+    public Map<String, Double> averagePriceByProduct(List<Order> orders) {
 
-        // Then calculate average for each product
-        return productPrices.entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> entry.getValue().stream()
-                                .mapToDouble(Double::doubleValue)
-                                .average()
-                                .orElse(0.0)
-                ));
-    }
-
-    // Exercise 2.3: Custom Collector & Parallel Streams
-
-    /**
-     * Get revenue report using custom collector
-     */
-    public RevenueReport getRevenueReport(List<Order> orders) {
         return orders.stream()
-                .flatMap(order -> order.getItems().stream())
-                .collect(new RevenueReportCollector());
+                .flatMap(order -> order.getLineItems().stream())
+                .collect(Collectors.toMap(
+                        item -> item.getProduct().getProductId(),
+                        item -> item.getProduct().getPrice(),
+                        (price1, price2) -> (price1 + price2) / 2
+                ));
     }
 
-    /**
-     * Top N products using parallel stream
-     */
-    public List<Map.Entry<String, Double>> topNProductsParallel(List<Order> orders, int n) {
-        return orders.parallelStream()
-                .flatMap(order -> order.getItems().stream())
+    // Exercise 2.3
+
+    public RevenueReport generateRevenueReport(List<Order> orders) {
+
+        return orders.stream()
+                .flatMap(order -> order.getLineItems().stream())
+                .collect(revenueCollector());
+    }
+
+    private Collector<LineItem, RevenueReport, RevenueReport> revenueCollector() {
+
+        return Collector.of(
+
+                RevenueReport::new,
+
+                (report, item) -> {
+
+                    double revenue =
+                            item.getProduct().getPrice() * item.getQuantity();
+
+                    report.setTotalRevenue(
+                            report.getTotalRevenue() + revenue);
+
+                    report.setItemCount(
+                            report.getItemCount() + 1);
+
+                    report.setMaxSingleItemRevenue(
+                            Math.max(report.getMaxSingleItemRevenue(), revenue));
+
+                },
+
+                (r1, r2) -> {
+
+                    r1.setTotalRevenue(
+                            r1.getTotalRevenue() + r2.getTotalRevenue());
+
+                    r1.setItemCount(
+                            r1.getItemCount() + r2.getItemCount());
+
+                    r1.setMaxSingleItemRevenue(
+                            Math.max(r1.getMaxSingleItemRevenue(),
+                                    r2.getMaxSingleItemRevenue()));
+
+                    return r1;
+                }
+
+        );
+    }
+
+    public List<ProductRevenue> topNProductsByRevenueParallel(List<Order> orders, int n) {
+
+        Map<Product, Double> revenueByProduct = orders.parallelStream()
+                .flatMap(order -> order.getLineItems().stream())
                 .collect(Collectors.groupingBy(
-                        LineItem::getProductId,
-                        Collectors.summingDouble(LineItem::getRevenue)
+                        LineItem::getProduct,
+                        Collectors.summingDouble(item ->
+                                item.getProduct().getPrice() * item.getQuantity())
+                ));
+
+        return revenueByProduct.entrySet()
+                .stream()
+                .map(entry -> new ProductRevenue(
+                        entry.getKey().getProductId(),
+                        entry.getKey().getProductName(),
+                        entry.getValue()
                 ))
-                .entrySet()
-                .parallelStream()
-                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .sorted(Comparator.comparing(ProductRevenue::getRevenue).reversed())
                 .limit(n)
-                .collect(Collectors.toList());
-    }
-}
-
-// Inner class for Revenue Report (we'll move this later)
-class RevenueReport {
-    private double totalRevenue;
-    private long itemCount;
-    private double maxSingleItemRevenue;
-
-    public RevenueReport(double totalRevenue, long itemCount, double maxSingleItemRevenue) {
-        this.totalRevenue = totalRevenue;
-        this.itemCount = itemCount;
-        this.maxSingleItemRevenue = maxSingleItemRevenue;
-    }
-
-    public double getTotalRevenue() { return totalRevenue; }
-    public long getItemCount() { return itemCount; }
-    public double getMaxSingleItemRevenue() { return maxSingleItemRevenue; }
-
-    @Override
-    public String toString() {
-        return "RevenueReport{" +
-                "totalRevenue=" + totalRevenue +
-                ", itemCount=" + itemCount +
-                ", maxSingleItemRevenue=" + maxSingleItemRevenue +
-                '}';
+                .toList();
     }
 }

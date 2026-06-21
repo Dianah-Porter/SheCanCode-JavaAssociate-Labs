@@ -2,47 +2,34 @@ package org.example.lab2_1;
 
 public class LineItem {
 
-    private final String productId;
-    private final String productName;
-    private final String category;
-    private final double price;
-    private final int quantity;
+    private Product product;
+    private int quantity;
 
-    public LineItem(String productId, String productName, String category, double price, int quantity) {
-        this.productId = productId;
-        this.productName = productName;
-        this.category = category;
-        this.price = price;
+    public LineItem(Product product, int quantity) {
+        this.product = product;
         this.quantity = quantity;
     }
 
-    public String getProductId() {
-        return productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public double getPrice() {
-        return price;
+    public Product getProduct() {
+        return product;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
+    public double getRevenue() {
+        return product.getPrice() * quantity;
+    }
+
+    public String getCategory() {
+        return product.getCategory();
+    }
+
     @Override
     public String toString() {
         return "LineItem{" +
-                "productId='" + productId + '\'' +
-                ", productName='" + productName + '\'' +
-                ", category='" + category + '\'' +
-                ", price=" + price +
+                "product=" + product +
                 ", quantity=" + quantity +
                 '}';
     }

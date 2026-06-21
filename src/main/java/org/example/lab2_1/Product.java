@@ -1,37 +1,74 @@
 package org.example.lab2_1;
 
+import java.util.Objects;
+
 public class Product {
-    private String id;
-    private String name;
+
+    private String productId;
+    private String productName;
     private String category;
     private double price;
 
-    public Product(String id, String name, String category, double price) {
-        this.id = id;
-        this.name = name;
+    public Product(String productId, String productName, String category, double price) {
+        this.productId = productId;
+        this.productName = productName;
         this.category = category;
         this.price = price;
     }
 
     // Getters
-    public String getId() { return id; }
-    public String getName() { return name; }
-    public String getCategory() { return category; }
-    public double getPrice() { return price; }
+    public String getProductId() {
+        return productId;
+    }
 
-    // Setters (optional)
-    public void setId(String id) { this.id = id; }
-    public void setName(String name) { this.name = name; }
-    public void setCategory(String category) { this.category = category; }
-    public void setPrice(double price) { this.price = price; }
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    // Setters
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     @Override
     public String toString() {
         return "Product{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+                "productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
                 ", category='" + category + '\'' +
                 ", price=" + price +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product product)) return false;
+        return Objects.equals(productId, product.productId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId);
     }
 }
