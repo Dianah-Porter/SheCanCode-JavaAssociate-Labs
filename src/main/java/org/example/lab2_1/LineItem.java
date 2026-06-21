@@ -1,38 +1,48 @@
 package org.example.lab2_1;
 
-
 public class LineItem {
-    private Product product;
-    private int quantity;
 
-    public LineItem(Product product, int quantity) {
-        this.product = product;
+    private final String productId;
+    private final String productName;
+    private final String category;
+    private final double price;
+    private final int quantity;
+
+    public LineItem(String productId, String productName, String category, double price, int quantity) {
+        this.productId = productId;
+        this.productName = productName;
+        this.category = category;
+        this.price = price;
         this.quantity = quantity;
     }
 
-    public Product getProduct() { return product; }
-    public int getQuantity() { return quantity; }
-
-    // Convenience methods for the stream operations
-    public String getCategory() {
-        return product.getCategory();
-    }
-
     public String getProductId() {
-        return product.getId();
+        return productId;
     }
 
-    public double getRevenue() {
-        return product.getPrice() * quantity;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProduct(Product product) { this.product = product; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public String getCategory() {
+        return category;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
 
     @Override
     public String toString() {
         return "LineItem{" +
-                "product=" + product +
+                "productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", category='" + category + '\'' +
+                ", price=" + price +
                 ", quantity=" + quantity +
                 '}';
     }
