@@ -19,8 +19,6 @@ public class NotificationMessage {
         this.attachments = builder.attachments;
     }
 
-    // GETTERS ONLY (important for immutability)
-
     public static class Builder {
         private String recipient;
         private String subject;
