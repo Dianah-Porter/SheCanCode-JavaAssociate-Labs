@@ -1,5 +1,5 @@
-package org.example.lab2_2;
-
+import org.example.demoproject.Week2.lab2_2.NotificationMessage;
+import org.example.demoproject.Week2.lab2_2.Priority;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

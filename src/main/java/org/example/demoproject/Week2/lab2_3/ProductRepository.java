@@ -1,14 +1,6 @@
 package org.example.demoproject.Week2.lab2_3;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductRepository {
-
-    void save(Product product);
-
-    Product findById(Long id);
-
-    List<Product> findAll();
-
-    void deleteById(Long id);
+public interface ProductRepository extends JpaRepository<Product, Long> {
 }

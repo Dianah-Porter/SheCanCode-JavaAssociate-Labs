@@ -13,31 +13,11 @@ public class ProductService {
         this.repository = repository;
     }
 
-    public void save(Product p) {
-        repository.save(p);
-    }
-
-    public Product findById(Long id) {
-        return repository.findById(id);
+    public Product save(Product product) {
+        return repository.save(product);
     }
 
     public List<Product> findAll() {
         return repository.findAll();
-    }
-
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
-
-    public void bulkImport(List<Product> products) {
-
-        for (Product p : products) {
-
-            if (p.getPrice() < 0) {
-                throw new RuntimeException("Invalid price");
-            }
-
-            repository.save(p);
-        }
     }
 }

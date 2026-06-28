@@ -11,21 +11,15 @@ public class Product {
     private Long id;
 
     private String name;
-
     private double price;
+    private int quantity;
 
-    private int stock;
+    public Product() {}
 
-    @Version
-    private Long version;
-
-    public Product() {
-    }
-
-    public Product(String name, double price, int stock) {
+    public Product(String name, double price, int quantity) {
         this.name = name;
         this.price = price;
-        this.stock = stock;
+        this.quantity = quantity;
     }
 
     public Long getId() {
@@ -40,11 +34,23 @@ public class Product {
         return price;
     }
 
-    public int getStock() {
-        return stock;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

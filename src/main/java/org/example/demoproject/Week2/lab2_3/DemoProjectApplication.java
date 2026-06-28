@@ -14,11 +14,10 @@ public class DemoProjectApplication {
 
     @Bean
     CommandLineRunner runner(ProductService service) {
-
         return args -> {
 
-            service.save(new Product("Laptop", 1200, 10));
-            service.save(new Product("Phone", 800, 20));
+            service.save(new Product("Laptop", 1200.0, 10));
+            service.save(new Product("Phone", 800.0, 20));
 
             System.out.println("ALL PRODUCTS:");
 

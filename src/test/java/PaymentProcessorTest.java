@@ -1,5 +1,4 @@
-package org.example.lab2_2.payment;
-
+import org.example.demoproject.Week2.lab2_2.payment.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
