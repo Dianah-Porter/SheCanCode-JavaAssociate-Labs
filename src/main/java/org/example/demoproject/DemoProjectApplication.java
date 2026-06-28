@@ -13,99 +13,26 @@ public class DemoProjectApplication {
     }
 
     @Bean
-    CommandLineRunner runner(ProductJdbcRepository repository) {
+    CommandLineRunner runner(ProductJpaRepository repository) {
 
         return args -> {
 
-            System.out.println("=================================");
-            System.out.println("TESTING JDBC REPOSITORY");
-            System.out.println("=================================");
+            Product p1 = new Product("Laptop", 1200, 10);
+            Product p2 = new Product("Phone", 900, 15);
 
-            // -------------------------
-            // 1. SAVE
-            // -------------------------
+            repository.save(p1);
+            repository.save(p2);
 
-            try {
+            System.out.println("Saved Products");
 
-                Product product = new Product(
-                        "P003",
-                        "Keyboard",
-                        80.0,
-                        20
-                );
-
-                repository.save(product);
-                System.out.println("Product P003 saved successfully.");
-
-            } catch (Exception e) {
-
-                System.out.println("Product P003 already exists.");
-            }
-
-            // -------------------------
-            // 2. FIND BY ID
-            // -------------------------
-
-            Product found = repository.findById("P003");
-
-            if (found != null) {
-
-                System.out.println();
-                System.out.println("Found Product");
-
-                System.out.println("ID    : " + found.getId());
-                System.out.println("Name  : " + found.getName());
-                System.out.println("Price : " + found.getPrice());
-                System.out.println("Stock : " + found.getStock());
-
-            } else {
-
-                System.out.println("Product not found.");
-            }
-
-            // -------------------------
-            // 3. FIND ALL
-            // -------------------------
-
-            System.out.println();
-            System.out.println("All Products");
-
-            for (Product p : repository.findAll()) {
-
-                System.out.println(
-                        p.getId() + " | " +
-                                p.getName() + " | " +
-                                p.getPrice() + " | " +
-                                p.getStock()
-                );
-            }
-
-            // -------------------------
-            // 4. DELETE
-            // -------------------------
-
-            repository.deleteById("P003");
-
-            System.out.println();
-            System.out.println("Deleted Product P003");
-
-            // -------------------------
-            // 5. VERIFY DELETE
-            // -------------------------
-
-            Product deleted = repository.findById("P003");
-
-            if (deleted == null) {
-
-                System.out.println("Deletion verified successfully.");
-
-            } else {
-
-                System.out.println("Delete failed.");
-            }
-
-            System.out.println();
-            System.out.println("Exercise 2.7 CRUD methods completed.");
+            repository.findAll().forEach(product ->
+                    System.out.println(
+                            product.getId() + " "
+                                    + product.getName() + " "
+                                    + product.getPrice() + " "
+                                    + product.getStock()
+                    )
+            );
         };
     }
 }

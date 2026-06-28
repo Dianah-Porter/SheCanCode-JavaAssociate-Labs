@@ -16,17 +16,16 @@ public class ProductJdbcRepository {
         this.dataSource = dataSource;
     }
 
-    // ---------------- SAVE ----------------
-
+    // SAVE
     public void save(Product product) throws SQLException {
 
         String sql = """
-                INSERT INTO products(id, name, price, stock)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO products(id,name,price,stock)
+                VALUES(?,?,?,?)
                 """;
 
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, product.getId());
             ps.setString(2, product.getName());
@@ -37,24 +36,20 @@ public class ProductJdbcRepository {
         }
     }
 
-    // ---------------- FIND BY ID ----------------
-
+    // FIND BY ID
     public Product findById(String id) throws SQLException {
 
-        String sql = """
-                SELECT *
-                FROM products
-                WHERE id = ?
-                """;
+        String sql = "SELECT * FROM products WHERE id=?";
 
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setString(1, id);
+            ps.setString(1,id);
 
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
+            if(rs.next()){
+
                 return new Product(
                         rs.getString("id"),
                         rs.getString("name"),
@@ -67,106 +62,108 @@ public class ProductJdbcRepository {
         }
     }
 
-    // ---------------- FIND ALL ----------------
-
-    public List<Product> findAll() throws SQLException {
-
-        String sql = "SELECT * FROM products";
+    // FIND ALL
+    public List<Product> findAll() throws SQLException{
 
         List<Product> products = new ArrayList<>();
 
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        String sql="SELECT * FROM products";
 
-            while (rs.next()) {
+        try(Connection connection=dataSource.getConnection();
+            PreparedStatement ps=connection.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery()){
 
-                Product product = new Product(
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getDouble("price"),
-                        rs.getInt("stock")
+            while(rs.next()){
+
+                products.add(
+
+                        new Product(
+                                rs.getString("id"),
+                                rs.getString("name"),
+                                rs.getDouble("price"),
+                                rs.getInt("stock")
+                        )
+
                 );
-
-                products.add(product);
             }
+
         }
 
         return products;
     }
 
-    // ---------------- DELETE ----------------
+    // DELETE
+    public void deleteById(String id)throws SQLException{
 
-    public void deleteById(String id) throws SQLException {
+        String sql="DELETE FROM products WHERE id=?";
 
-        String sql = """
-                DELETE FROM products
-                WHERE id = ?
-                """;
+        try(Connection connection=dataSource.getConnection();
+            PreparedStatement ps=connection.prepareStatement(sql)){
 
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            ps.setString(1, id);
+            ps.setString(1,id);
 
             ps.executeUpdate();
         }
+
     }
 
-    // ---------------- TRANSFER ----------------
+    // TRANSFER (TRANSACTION)
+    public void transfer(String fromId,String toId,int quantity)throws SQLException{
 
-    public void transfer(String fromId,
-                         String toId,
-                         int quantity) throws SQLException {
+        Connection connection=dataSource.getConnection();
 
-        Connection connection = dataSource.getConnection();
-
-        try {
+        try{
 
             connection.setAutoCommit(false);
 
-            String deduct = """
+            String deductSql="""
                     UPDATE products
-                    SET stock = stock - ?
-                    WHERE id = ?
+                    SET stock=stock-?
+                    WHERE id=?
                     """;
 
-            PreparedStatement ps1 =
-                    connection.prepareStatement(deduct);
+            PreparedStatement deduct=connection.prepareStatement(deductSql);
 
-            ps1.setInt(1, quantity);
-            ps1.setString(2, fromId);
+            deduct.setInt(1,quantity);
+            deduct.setString(2,fromId);
 
-            ps1.executeUpdate();
+            deduct.executeUpdate();
 
-            String add = """
+            String addSql="""
                     UPDATE products
-                    SET stock = stock + ?
-                    WHERE id = ?
+                    SET stock=stock+?
+                    WHERE id=?
                     """;
 
-            PreparedStatement ps2 =
-                    connection.prepareStatement(add);
+            PreparedStatement add=connection.prepareStatement(addSql);
 
-            ps2.setInt(1, quantity);
-            ps2.setString(2, toId);
+            add.setInt(1,quantity);
+            add.setString(2,toId);
 
-            ps2.executeUpdate();
+            add.executeUpdate();
 
             connection.commit();
 
-        } catch (Exception e) {
+            System.out.println("Transfer Successful");
+
+        }
+
+        catch(Exception e){
 
             connection.rollback();
 
             throw e;
 
-        } finally {
+        }
+
+        finally{
 
             connection.setAutoCommit(true);
 
             connection.close();
+
         }
+
     }
 
 }
