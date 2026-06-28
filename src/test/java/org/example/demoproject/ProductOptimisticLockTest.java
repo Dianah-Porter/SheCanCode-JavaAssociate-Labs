@@ -3,7 +3,7 @@ package org.example.demoproject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.OptimisticLockException;
-import org.example.demoproject.lab2_3.Product;
+import org.example.demoproject.Week2.lab2_3.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

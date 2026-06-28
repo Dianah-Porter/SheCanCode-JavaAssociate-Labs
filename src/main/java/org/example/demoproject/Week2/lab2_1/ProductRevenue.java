@@ -1,4 +1,4 @@
-package org.example.demoproject.lab2_1;
+package org.example.demoproject.Week2.lab2_1;
 
 public class ProductRevenue {
 

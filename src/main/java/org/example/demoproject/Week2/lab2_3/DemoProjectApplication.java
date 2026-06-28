@@ -1,4 +1,4 @@
-package org.example.demoproject.lab2_3;
+package org.example.demoproject.Week2.lab2_3;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

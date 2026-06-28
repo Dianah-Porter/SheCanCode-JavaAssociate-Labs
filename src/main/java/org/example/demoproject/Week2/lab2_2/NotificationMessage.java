@@ -1,4 +1,4 @@
-package org.example.demoproject.lab2_2;
+package org.example.demoproject.Week2.lab2_2;
 
 import java.util.ArrayList;
 import java.util.List;
