@@ -1,6 +1,7 @@
-package org.example.demoproject;
+package org.example.demoproject.lab2_3;
 
 import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 

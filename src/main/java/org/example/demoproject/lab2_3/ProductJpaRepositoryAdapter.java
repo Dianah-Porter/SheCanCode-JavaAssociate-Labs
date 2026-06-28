@@ -1,4 +1,4 @@
-package org.example.demoproject;
+package org.example.demoproject.lab2_3;
 
 import org.springframework.stereotype.Repository;
 

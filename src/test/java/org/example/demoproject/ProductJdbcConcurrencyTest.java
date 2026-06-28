@@ -1,5 +1,6 @@
 package org.example.demoproject;
 
+import org.example.demoproject.lab2_3.ProductJdbcRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
