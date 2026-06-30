@@ -1,4 +1,4 @@
-package org.example.demoproject.Week3.controller;
+package org.example.demoproject.Week3_SpringOAuthGoogle.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

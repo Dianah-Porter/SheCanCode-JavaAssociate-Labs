@@ -1,4 +1,4 @@
-package org.example.demoproject.Week3.model;
+package org.example.demoproject.Week3_SpringOAuthGoogle.model;
 
 import jakarta.persistence.*;
 

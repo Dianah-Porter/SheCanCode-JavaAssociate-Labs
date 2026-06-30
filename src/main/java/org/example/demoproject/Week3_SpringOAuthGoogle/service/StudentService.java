@@ -1,7 +1,7 @@
-package org.example.demoproject.Week3.service;
+package org.example.demoproject.Week3_SpringOAuthGoogle.service;
 
-import org.example.demoproject.Week3.model.Student;
-import org.example.demoproject.Week3.repository.StudentRepository;
+import org.example.demoproject.Week3_SpringOAuthGoogle.model.Student;
+import org.example.demoproject.Week3_SpringOAuthGoogle.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

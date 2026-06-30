@@ -1,7 +1,7 @@
-package org.example.demoproject.Week3.controller;
+package org.example.demoproject.Week3_SpringOAuthGoogle.controller;
 
-import org.example.demoproject.Week3.model.Student;
-import org.example.demoproject.Week3.service.StudentService;
+import org.example.demoproject.Week3_SpringOAuthGoogle.model.Student;
+import org.example.demoproject.Week3_SpringOAuthGoogle.service.StudentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.example.demoproject.Week3.controller;
+package org.example.demoproject.Week3_SpringOAuthGoogle.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
